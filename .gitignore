@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+ml/data/
+ml/out/*.pt
+ml/_*
+server/*.db
+web/node_modules/
+web/dist/
+ml/out_*.log
+ml/out/*.onnx
