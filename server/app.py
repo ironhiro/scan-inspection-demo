@@ -121,7 +121,9 @@ _session: Optional[ort.InferenceSession] = None
 def session():
     global _session
     if _session is None:
-        _session = ort.InferenceSession(MODEL_PATH, providers=["CPUExecutionProvider"])
+        opts = ort.SessionOptions()
+        opts.log_severity_level = 3  # errors only
+        _session = ort.InferenceSession(MODEL_PATH, sess_options=opts, providers=["CPUExecutionProvider"])
     return _session
 
 

@@ -3,6 +3,10 @@ import * as ort from 'onnxruntime-web/webgpu';
 import { connected, detectCard, measureMargins, rectify, rectSize, type Img } from './cv';
 import { DAMAGE_TYPES, MODEL_H, MODEL_W, type Analysis, type Damage } from './types';
 
+// ORT logs an informational warning when it places shape ops on the CPU under WebGPU; keep only errors
+ort.env.logLevel = 'error';
+const SESSION_OPTS = { logSeverityLevel: 3 as const };
+
 const MODEL_VERSION = 'damage-unet / synth-v1';
 const MIN_AREA = [0, 10, 8, 10, 25]; // model px, same as pipeline.MIN_AREA
 const MAX_SIDE = 2400;
@@ -17,7 +21,7 @@ function getSession() {
     const gpu = (navigator as Navigator & { gpu?: { requestAdapter(): Promise<unknown> } }).gpu;
     if (gpu && (await gpu.requestAdapter().catch(() => null))) {
       try {
-        const s = await ort.InferenceSession.create(new Uint8Array(buf.slice(0)), { executionProviders: ['webgpu'] });
+        const s = await ort.InferenceSession.create(new Uint8Array(buf.slice(0)), { ...SESSION_OPTS, executionProviders: ['webgpu'] });
         // a session can be created yet fail on first run; verify once
         await s.run({ image: new ort.Tensor('float32', new Float32Array(3 * MODEL_W * MODEL_H), [1, 3, MODEL_H, MODEL_W]) });
         return { s, provider: 'WebGPU' };
@@ -25,7 +29,7 @@ function getSession() {
         console.warn('WebGPU unavailable, using WASM', e);
       }
     }
-    const s = await ort.InferenceSession.create(new Uint8Array(buf.slice(0)), { executionProviders: ['wasm'] });
+    const s = await ort.InferenceSession.create(new Uint8Array(buf.slice(0)), { ...SESSION_OPTS, executionProviders: ['wasm'] });
     return { s, provider: 'WASM (CPU)' };
   })();
   return session;
