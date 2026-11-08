@@ -8,3 +8,4 @@ web/node_modules/
 web/dist/
 ml/out_*.log
 ml/out/*.onnx
+ml/out/grade_analysis.json
