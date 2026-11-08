@@ -1,6 +1,6 @@
 {
-  "name": "데모용 등급 기준표 v0.2",
-  "note": "실제 기준은 발주사 내부 등급 기준으로 교체합니다. 10점에서 항목별 감점을 빼고, 구김이 있으면 최고 등급 상한을 둡니다.",
+  "name": "데모용 등급 기준표 v0.3",
+  "note": "실제 기준은 발주사 내부 등급 기준으로 교체합니다. 10점에서 항목별 감점을 빼고, 구김이 있으면 최고 등급 상한을 둡니다. 테두리 마모는 카드 전체 길이 합계로 한 번만 감점합니다.",
   "card_width_mm": 63,
   "centering": [
     { "max": 55, "deduct": 0 },
@@ -11,7 +11,7 @@
   ],
   "damage": {
     "corner_wear": { "measure": "area_mm2", "steps": [ { "max": 3, "deduct": 0.5 }, { "max": 8, "deduct": 1 }, { "max": 1e9, "deduct": 1.5 } ] },
-    "edge_wear":   { "measure": "length_mm", "steps": [ { "max": 8, "deduct": 0.5 }, { "max": 20, "deduct": 1 }, { "max": 1e9, "deduct": 1.5 } ] },
+    "edge_wear":   { "measure": "length_mm", "aggregate": "sum", "steps": [ { "max": 8, "deduct": 0.5 }, { "max": 20, "deduct": 1 }, { "max": 1e9, "deduct": 1.5 } ] },
     "scratch":     { "measure": "length_mm", "steps": [ { "max": 10, "deduct": 0.5 }, { "max": 25, "deduct": 1 }, { "max": 1e9, "deduct": 1.5 } ] },
     "crease":      { "measure": "length_mm", "steps": [ { "max": 1e9, "deduct": 1.5 } ], "cap": 6 }
   }

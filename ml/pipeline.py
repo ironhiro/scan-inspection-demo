@@ -169,6 +169,8 @@ def grade(instances, margins, card_w_px, rules=None):
                 items.append({"reason": "centering", "value": round(worst, 1), "deduct": step["deduct"]})
             break
     cap = 10
+    measured = []  # (type, value, count)
+    sums = {}
     for d in instances:
         r = rules["damage"][d["type"]]
         x, y, bw, bh = d["bbox"]
@@ -176,11 +178,21 @@ def grade(instances, margins, card_w_px, rules=None):
             v = d["area"] * mm * mm
         else:
             v = float(np.hypot(bw, bh)) * mm
-        for step in r["steps"]:
-            if v <= step["max"]:
-                items.append({"reason": d["type"], "value": round(v, 2), "deduct": step["deduct"]})
-                break
+        if r.get("aggregate") == "sum":
+            # one deduction per card from the summed measure, so the grade does not
+            # depend on how one stretch of wear happens to split into pieces
+            s = sums.setdefault(d["type"], [0.0, 0])
+            s[0] += v
+            s[1] += 1
+        else:
+            measured.append((d["type"], v, 1))
         cap = min(cap, r.get("cap", 10))
+    measured += [(t, v, n) for t, (v, n) in sums.items()]
+    for t, v, n in measured:
+        for step in rules["damage"][t]["steps"]:
+            if v <= step["max"]:
+                items.append({"reason": t, "value": round(v, 2), "count": n, "deduct": step["deduct"]})
+                break
     total = sum(i["deduct"] for i in items)
     g = int(max(1, min(cap, np.floor(10 - total))))
     return {"grade": g, "items": items, "cap": cap}

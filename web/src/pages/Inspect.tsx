@@ -326,7 +326,7 @@ export default function Inspect({ id }: { id: string }) {
                 {g.items.length === 0 && <tr><td className="muted">감점 항목 없음</td></tr>}
                 {g.items.map((it, i) => (
                   <tr key={i} onClick={() => it.damageId && setSelected(it.damageId)} style={{ cursor: it.damageId ? 'pointer' : undefined }}>
-                    <th>{it.reason === 'centering' ? '센터링' : `${DAMAGE_LABEL[it.reason]} ${it.damageId}`}</th>
+                    <th>{it.reason === 'centering' ? '센터링' : it.damageId ? `${DAMAGE_LABEL[it.reason]} ${it.damageId}` : `${DAMAGE_LABEL[it.reason]} ${it.count}건 합계`}</th>
                     <td className="r num muted">{it.reason === 'centering' ? `최대 ${it.value.toFixed(1)}%` : `${it.value.toFixed(2)} ${it.unit}`}</td>
                     <td className="r num" style={{ width: 44 }}>−{it.deduct}</td>
                   </tr>

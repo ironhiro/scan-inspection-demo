@@ -71,11 +71,11 @@
   "px_per_mm": 10.0
  },
  "grade": {
-  "exact": 0.738,
-  "within1": 0.962,
-  "mean_signed": -0.102
+  "exact": 0.806,
+  "within1": 0.988,
+  "mean_signed": -0.104
  },
- "cpu_ms_per_image": 213.73040000000464,
+ "cpu_ms_per_image": 197.5076499999986,
  "train_log": [
   {
    "epoch": 1,
