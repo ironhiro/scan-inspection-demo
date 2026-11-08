@@ -33,6 +33,7 @@ export default function CaseList() {
     return c;
   }, [cases]);
 
+  const nextReview = [...(cases ?? [])].reverse().find((r) => r.status === 'analyzed' || r.status === 'reviewing');
   const shown = (cases ?? []).filter((r) => filter === 'all' || r.status === filter);
 
   async function analyzeAll() {
@@ -88,9 +89,16 @@ export default function CaseList() {
         </div>
         <span className="spacer" />
         {busy && <span className="muted">{busy}</span>}
-        <button className="btn" disabled={!!busy || !counts.new} onClick={analyzeAll}>
-          분석 전 {counts.new}건 일괄 분석
-        </button>
+        {counts.new > 0 && (
+          <button className="btn" disabled={!!busy} onClick={analyzeAll}>
+            분석 전 {counts.new}건 일괄 분석
+          </button>
+        )}
+        {nextReview && (
+          <button className="btn primary" disabled={!!busy} onClick={() => (location.hash = `#/case/${nextReview.id}`)}>
+            다음 검토 대기 건 열기 ({nextReview.id})
+          </button>
+        )}
         <button className="btn" disabled={!!busy} onClick={() => fileRef.current?.click()}>이미지 등록</button>
         <input
           ref={fileRef} type="file" accept="image/*" multiple hidden
@@ -116,6 +124,7 @@ export default function CaseList() {
               <th className="r">AI 등급</th>
               <th className="r">확정 등급</th>
               <th className="hide-sm">검사 완료</th>
+              <th />
             </tr>
           </thead>
           <tbody>
@@ -136,6 +145,7 @@ export default function CaseList() {
                     {fg !== null && ag && fg !== ag.grade && <span className="changed"> 수정</span>}
                   </td>
                   <td className="hide-sm num muted">{r.completedAt ? fmtTime(r.completedAt) : ''}</td>
+                  <td className="r"><span className="row-go">{r.status === 'done' ? '결과 보기' : r.status === 'new' ? '분석하기' : '검토하기'} →</span></td>
                 </tr>
               );
             })}

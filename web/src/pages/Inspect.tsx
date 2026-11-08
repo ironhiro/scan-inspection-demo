@@ -277,6 +277,14 @@ export default function Inspect({ id }: { id: string }) {
             )}
           </div>
           <div className="hint" style={{ marginTop: 4 }}>{rec.fileName} · 등록 {fmtTime(rec.createdAt)}</div>
+          {ai && !locked && (
+            <ol className="guide">
+              <li>이미지 위 색칠된 영역과 오른쪽 손상 목록이 맞는지 확인합니다.</li>
+              <li>틀린 손상은 <b>삭제</b>, 유형이 틀리면 목록에서 바꾸고, 놓친 손상은 <b>영역 추가(A)</b> 후 이미지에서 드래그합니다.</li>
+              <li>초록 점선(여백선)이 인쇄 경계와 어긋나면 선을 드래그해 맞춥니다.</li>
+              <li>등급을 확인하고 <b>검사 완료</b>를 누릅니다.</li>
+            </ol>
+          )}
           {locked && nextOpen && (
             <div style={{ marginTop: 8 }}><a href={`#/case/${nextOpen.id}`}>다음 미완료 건 {nextOpen.id} →</a></div>
           )}

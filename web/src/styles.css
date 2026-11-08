@@ -102,6 +102,10 @@ table.grid td.r, table.grid th.r { text-align: right; }
 .status.reviewing::before { background: var(--accent); }
 .status.done::before { background: var(--ok); }
 .grade-pill { display: inline-block; min-width: 22px; text-align: center; font-weight: 600; }
+.row-go { color: var(--accent); white-space: nowrap; font-size: 12px; }
+table.grid tr.row:hover .row-go { text-decoration: underline; }
+.guide { margin: 10px 0 0; padding: 8px 10px 8px 26px; background: var(--accent-weak); border-radius: 4px; font-size: 12px; line-height: 1.55; }
+.guide li { margin: 1px 0; }
 .empty { padding: 40px; text-align: center; color: var(--muted); background: var(--panel); border: 1px solid var(--line); }
 .dropzone-on { outline: 2px dashed var(--accent); outline-offset: -6px; }
 
